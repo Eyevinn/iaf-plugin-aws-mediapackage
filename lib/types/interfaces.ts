@@ -15,8 +15,9 @@ export interface Uploader {
 }
 
 export interface TranscodeDispatcher {
+    mediaPackagerEndpoint: string;
     packagingGroupId: any;
-    sourceArn: string;
+    roleArn: string;
     logger: winston.Logger;
     dispatch(fileName: string): Promise<any>;
 }
