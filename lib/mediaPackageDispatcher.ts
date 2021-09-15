@@ -32,12 +32,17 @@ export class MediaPackageDispatcher implements TranscodeDispatcher {
         this.mediaPackageClient = new MediaPackageVodClient(this.mediaPackagerEndpoint);
     }
 
+    /**
+     * Dispatches a re-packaging job to a MediaPackage instance
+     * @param fileName the name of the file ingest into the MediaPackage instance
+     * @returns the response from AWS including the egressEndpoints if successful.
+     */
     async dispatch(fileName: string): Promise<any> {
         const assetConfig = {
             Id: uuidv4(),
             PackagingGroupId: this.packagingGroupId,
             SourceArn: this.sourceArn,
-            ResourceId: fileName + new Date().toISOString(),
+            ResourceId: fileName + (new Date()).toISOString(),
             SourceRoleArn: this.roleArn,
             Tags: {}
         };
@@ -46,14 +51,14 @@ export class MediaPackageDispatcher implements TranscodeDispatcher {
             const data = await this.mediaPackageClient.send(config);
             this.logger.log({
                 level: 'info',
-                message: `MediaPackage job created for ${fileName}. ${data.PackagingGroupId}`
+                message: `MediaPackage job created for ${fileName}. ${data.Id}`
             })
             return data;
         }
         catch (err) {
             this.logger.log({
                 level: 'error',
-                message: `Failed to create a MediaPackage job for ${fileName}! `
+                message: `Failed to create a MediaPackage job for ${fileName}!`
             })
             throw err;
         }
