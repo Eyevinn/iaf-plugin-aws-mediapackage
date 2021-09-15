@@ -7,7 +7,7 @@ The Eyevinn Ingest Application Framework (Eyevinn IAF) is a framework to simplif
 To install the plugin in your project, run the following command.
 
 ```
-npm install --save @eyevinn/iaf-plugin-aws
+npm install --save @eyevinn/iaf-plugin-aws-mediapackage
 ```
 
 ## Using the module in your application based on Eyevinn IAF
