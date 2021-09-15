@@ -21,8 +21,8 @@ export class MediaPackageDispatcher implements TranscodeDispatcher {
      */
     constructor (mediaPackagerEndpoint: string, region: string, roleArn: string, packagingGroupId: string, logger: winston.Logger) {
         this.roleArn = roleArn;
-        this.packagingGroupId = packagingGroupId;
         this.logger = logger;
+        this.packagingGroupId = packagingGroupId;
         this.mediaPackagerEndpoint = {
             endpoint: `https://${mediaPackagerEndpoint}.mediapackage.${region}.amazonaws.com`
         }

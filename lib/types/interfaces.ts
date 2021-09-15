@@ -15,11 +15,10 @@ export interface Uploader {
 }
 
 export interface TranscodeDispatcher {
-    mediaPackagerEndpoint: string;
     packagingGroupId: any;
     roleArn: string;
     logger: winston.Logger;
-    dispatch(fileName: string): Promise<any>;
+    dispatch(sourceArn: string): Promise<any>;
 }
 
 export interface FileWatcher {
