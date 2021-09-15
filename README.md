@@ -36,7 +36,7 @@ Creates a new `AWSUploadModule` object. You need to provide the unique part your
 
 `onFileAdd = (filePath: string, readStream: Readable)`.
 
-Method that is executed when a file is added to the directory being watched. `fileName` is the source ARN of the file in the S3 bucket that MediaPackage will repackage, and `readStream` is a `Readable` stream of the file data. Any file watcher plugins are *required* to provide these. The method dispatches a repackaging job to the MediaPackage endpoint.
+Method that is executed when a file is added to the directory being watched. `filePath` is the source ARN of the file in the S3 bucket that MediaPackage will repackage, and `readStream` is a `Readable` stream of the file data. Any file watcher plugins are *required* to provide these. The method dispatches a repackaging job to the MediaPackage endpoint.
 
 ## `MediaPackageDispatcher`
 Sub-module that dispatches MediaPackage video packaging jobs.

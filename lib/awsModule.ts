@@ -16,21 +16,20 @@ export class AwsUploadModule implements IafUploadModule {
   }
 
   /**
-   * Method that runs when a FileWatcher detects a new file.
-   * Uploads the file to an S3 ingress bucket, and dispatches a transcoding job when
-   * the upload is completed.
-   * @param sourceArn The ARN for the source content in Amazon S3
+   * Method that runs when a file is added an S3 bucket.
+   * Adds the file to the MediaPackage Dispatcher.
+   * @param filePath The ARN for the source content in Amazon S3
    */
-  onFileAdd = (fileName: string, readStream: Readable) => {
+  onFileAdd = (filePath: string, readStream: Readable) => {
     try {
-      this.dispatcher.dispatch(fileName).then((result) => {
+      this.dispatcher.dispatch(filePath).then((result) => {
         this.fileUploadedDelegate(result);
       });
     }
     catch (err) {
       this.logger.log({
         level: "Error",
-        message: `Error when attempting to process file: ${fileName}. Full error: ${err}`,
+        message: `Error when attempting to process file: ${filePath}. Full error: ${err}`,
       })
     }
   }
