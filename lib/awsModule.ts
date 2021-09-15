@@ -32,9 +32,9 @@ export class AwsUploadModule implements IafUploadModule {
         this.fileName = path.basename(filePath);
         try {
             this.uploader.upload(readStream, this.fileName).then(() => {
-                this.dispatcher.dispatch(this.fileName).then(() => {
-                    this.fileUploadedDelegate();
-               });
+                this.dispatcher.dispatch(this.fileName).then((result) => {
+                    this.fileUploadedDelegate(result);
+                });
             })
         }
         catch (err) {
