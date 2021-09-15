@@ -1,5 +1,4 @@
 import winston from "winston";
-import * as path from 'path'
 import { IafUploadModule } from './types/interfaces'
 import { MediaPackageDispatcher } from "./mediaPackageDispatcher";
 import { Readable } from "stream";
