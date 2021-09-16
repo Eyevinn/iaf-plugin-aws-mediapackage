@@ -1,6 +1,6 @@
 {
   "name": "@eyevinn/iaf-plugin-aws-mediapackage",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Eyevinn Ingest Application Framework (IAF) plugin for just-in-time video packaging of files from an S3 bucket",
   "main": "./dist/awsModule.js",
   "types": "./dist/types/awsModule.d.ts",
