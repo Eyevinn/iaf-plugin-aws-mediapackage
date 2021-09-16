@@ -30,9 +30,9 @@ fileWatcher.onAdd(awsUploader.onFileAdd);
 Default plugin export. This class is plug-and-play with the Ingest Application Framework, as described in the previous section.
 
 ### Methods
-`constructor(mediaPackagerEndpoint: string, awsRegion: string, roleArn: string, packagingGroupId: string, logger: winston.Logger)`
+`constructor(roleArn: string, packagingGroupId: string, logger: winston.Logger)`
 
-Creates a new `AWSUploadModule` object. You need to provide the unique part your mediaPackage endpoint URL, which AWS region it is running in. You will also need to provide a role ARN, as well as the MediaPackage `packagingGroupId`. A winston logger is also needed. These parameters are used to initialize the sub-modules.
+Creates a new `AWSUploadModule` object. You will need to provide a role ARN, as well as the MediaPackage `packagingGroupId`. A winston logger is also needed. These parameters are used to initialize the sub-modules.
 
 `onFileAdd = (filePath: string, readStream: Readable)`.
 
@@ -50,6 +50,7 @@ In most cases, the parameters will be passed down to the parent `AwsUploadModule
 `async dispatch(sourceArn: string)`
 
 Dispatches a MediaPackage repackaging job. Jobs are executed with the settings specified in `packagingGroup` defined by the `packagingGroupId`. `sourceArn` is the S3 source ARN for the input file.
+
 # [Contributing](CONTRIBUTING.md)
 
 In addition to contributing code, you can help to triage issues. This can include reproducing bug reports, or asking for vital information such as version numbers or reproduction instructions.
