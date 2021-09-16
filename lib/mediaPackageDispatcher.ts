@@ -33,7 +33,7 @@ export class MediaPackageDispatcher implements TranscodeDispatcher {
     if (!sourceArn) {
       this.logger.log({
         level: 'error',
-        message: `sourceArn is not defined`
+        message: `sourceArn is required!`
       })
       return null;
     }
