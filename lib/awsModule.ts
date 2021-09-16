@@ -10,9 +10,9 @@ export class AwsUploadModule implements IafUploadModule {
   fileUploadedDelegate: Function;
 
 
-  constructor(mediaPackagerEndpoint: string, awsRegion: string, roleArn: string, packagingGroupId: string, logger: winston.Logger) {
+  constructor(roleArn: string, packagingGroupId: string, logger: winston.Logger) {
     this.logger = logger;
-    this.dispatcher = new MediaPackageDispatcher(mediaPackagerEndpoint, awsRegion, roleArn, packagingGroupId, this.logger);
+    this.dispatcher = new MediaPackageDispatcher(roleArn, packagingGroupId, this.logger);
   }
 
   /**

@@ -13,20 +13,15 @@ export class MediaPackageDispatcher implements TranscodeDispatcher {
 
   /**
    * Initializes a MediaConvertDispatcher
-   * @param mediaPackagerEndpoint the unique part of the endpoint to the mediaPackage instance
-   * @param region the AWS region
    * @param roleArn the role ARN string for AWS
    * @param packagingGroupId the packaging group id associated with this asset
    * @param logger a logger object
    */
-  constructor (mediaPackagerEndpoint: string, region: string, roleArn: string, packagingGroupId: string, logger: winston.Logger) {
+  constructor (roleArn: string, packagingGroupId: string, logger: winston.Logger) {
       this.roleArn = roleArn;
       this.logger = logger;
       this.packagingGroupId = packagingGroupId;
-      this.mediaPackagerEndpoint = {
-        endpoint: `https://${mediaPackagerEndpoint}.mediapackage.${region}.amazonaws.com`
-      }
-      this.mediaPackageClient = new MediaPackageVodClient(this.mediaPackagerEndpoint);
+      this.mediaPackageClient = new MediaPackageVodClient({});
   }
 
   /**
@@ -35,6 +30,13 @@ export class MediaPackageDispatcher implements TranscodeDispatcher {
    * @returns The response from AWS including the egressEndpoints if successful.
    */
   async dispatch(sourceArn: string): Promise<any> {
+    if (!sourceArn) {
+      this.logger.log({
+        level: 'error',
+        message: `sourceArn is not defined`
+      })
+      return null;
+    }
     const assetConfig = {
       Id: uuidv4(),
       PackagingGroupId: this.packagingGroupId,
@@ -48,7 +50,7 @@ export class MediaPackageDispatcher implements TranscodeDispatcher {
       const data = await this.mediaPackageClient.send(config);
       this.logger.log({
         level: 'info',
-        message: `MediaPackage job created for ${sourceArn}. ${data.Id}`
+        message: `MediaPackage job created for ${sourceArn}. ID: ${data.Id}`
       })
       return data;
     }
@@ -57,7 +59,7 @@ export class MediaPackageDispatcher implements TranscodeDispatcher {
         level: 'error',
         message: `Failed to create a MediaPackage job for ${sourceArn}!`
       })
-      throw err;
+      return null;
     }
   }
 }
