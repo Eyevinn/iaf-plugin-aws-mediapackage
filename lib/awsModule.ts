@@ -1,13 +1,14 @@
 import winston from "winston";
-import { IafUploadModule } from './types/interfaces'
 import { MediaPackageDispatcher } from "./mediaPackageDispatcher";
 import { Readable } from "stream";
+import { IafUploadModule } from "eyevinn-iaf";
 
 export class AwsUploadModule implements IafUploadModule {
   logger: winston.Logger;
   playlistName: string;
   dispatcher: MediaPackageDispatcher;
-  fileUploadedDelegate: Function;
+  fileUploadedDelegate: (result: any) => any;
+  progressDelegate: (result: any) => any;
 
 
   constructor(roleArn: string, packagingGroupId: string, logger: winston.Logger) {
