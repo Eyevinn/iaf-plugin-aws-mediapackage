@@ -39,6 +39,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-mediapackage-vod": "^3.31.0",
+    "@types/eyevinn-iaf": "^1.0.1",
     "uuid": "^8.3.2",
     "winston": "^3.3.3"
   }
