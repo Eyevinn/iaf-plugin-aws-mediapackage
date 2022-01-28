@@ -1,17 +1,16 @@
-import winston from "winston";
 import { MediaPackageDispatcher } from "./mediaPackageDispatcher";
 import { Readable } from "stream";
-import { IafUploadModule } from "eyevinn-iaf";
+import { IafUploadModule, Logger } from "eyevinn-iaf";
 
 export class AwsUploadModule implements IafUploadModule {
-  logger: winston.Logger;
+  logger: Logger;
   playlistName: string;
   dispatcher: MediaPackageDispatcher;
-  fileUploadedDelegate: (result: any) => any;
+  fileUploadedDelegate: (result: any, error?: any) => any;
   progressDelegate: (result: any) => any;
 
 
-  constructor(roleArn: string, packagingGroupId: string, logger: winston.Logger) {
+  constructor(roleArn: string, packagingGroupId: string, logger: Logger) {
     this.logger = logger;
     this.dispatcher = new MediaPackageDispatcher(roleArn, packagingGroupId, this.logger);
   }
@@ -24,14 +23,15 @@ export class AwsUploadModule implements IafUploadModule {
   onFileAdd = (filePath: string, readStream: Readable) => {
     try {
       this.dispatcher.dispatch(filePath).then((result) => {
-        this.fileUploadedDelegate(result);
+        if (result['resp'] === null) {
+          this.fileUploadedDelegate(null, result['error']);
+        } else {
+          this.fileUploadedDelegate(result['resp']);
+        }
       });
     }
     catch (err) {
-      this.logger.log({
-        level: "Error",
-        message: `Error when attempting to process file: ${filePath}. Full error: ${err}`,
-      })
+      this.logger.error(`Error when attempting to process file: ${filePath}. Full error: ${err}`);
     }
   }
 }
