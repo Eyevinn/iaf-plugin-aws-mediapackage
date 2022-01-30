@@ -1,7 +1,7 @@
 import { MediaPackageVodClient, CreateAssetCommand } from "@aws-sdk/client-mediapackage-vod";
-import winston from "winston";
 import { TranscodeDispatcher } from './types/interfaces'
 import { v4 as uuidv4 } from 'uuid';
+import { Logger } from "eyevinn-iaf";
 
 
 export class MediaPackageDispatcher implements TranscodeDispatcher {
@@ -9,7 +9,7 @@ export class MediaPackageDispatcher implements TranscodeDispatcher {
   mediaPackagerEndpoint: any;
   mediaPackageClient: MediaPackageVodClient;
   roleArn: string;
-  logger: winston.Logger;
+  logger: Logger;
 
   /**
    * Initializes a MediaConvertDispatcher
@@ -17,7 +17,7 @@ export class MediaPackageDispatcher implements TranscodeDispatcher {
    * @param packagingGroupId the packaging group id associated with this asset
    * @param logger a logger object
    */
-  constructor (roleArn: string, packagingGroupId: string, logger: winston.Logger) {
+  constructor (roleArn: string, packagingGroupId: string, logger: Logger) {
       this.roleArn = roleArn;
       this.logger = logger;
       this.packagingGroupId = packagingGroupId;
@@ -31,10 +31,7 @@ export class MediaPackageDispatcher implements TranscodeDispatcher {
    */
   async dispatch(sourceArn: string): Promise<any> {
     if (!sourceArn) {
-      this.logger.log({
-        level: 'error',
-        message: `sourceArn is required!`
-      })
+      this.logger.error("sourceArn is required!");
       return null;
     }
     const assetConfig = {
@@ -48,18 +45,12 @@ export class MediaPackageDispatcher implements TranscodeDispatcher {
     try {
       const config = new CreateAssetCommand(assetConfig);
       const data = await this.mediaPackageClient.send(config);
-      this.logger.log({
-        level: 'info',
-        message: `MediaPackage job created for ${sourceArn}. ID: ${data.Id}`
-      })
-      return data;
+      this.logger.info(`MediaPackage job created for ${sourceArn}. ID: ${data.Id}`);
+      return { resp: data };
     }
     catch (err) {
-      this.logger.log({
-        level: 'error',
-        message: `Failed to create a MediaPackage job for ${sourceArn}!`
-      })
-      return null;
+      this.logger.error(`Failed to create a MediaPackage job for ${sourceArn}!`);
+      return {resp: null, error: err};
     }
   }
 }
